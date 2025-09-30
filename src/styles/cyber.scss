@@ -227,3 +227,20 @@
   mix-blend-mode: normal;
   opacity: 1;
 }
+
+/* ===== Partners Marquee ================================================== */
+
+/* бесконечный цикл: ширина трека 200%, уезжаем на -50% */
+@keyframes marquee-x {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-50%,0,0); }
+}
+
+.marquee-track {
+  animation: marquee-x var(--marquee-duration, 36s) linear infinite;
+}
+
+/* уважение к предпочитаемому снижению анимации */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation-play-state: paused !important; }
+}

@@ -33,9 +33,11 @@ export default function Hero() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-4xl text-balance text-4xl font-extrabold tracking-tight md:text-6xl"
           >
+            <h1 className="mx-auto max-w-4xl text-balance text-4xl font-extrabold tracking-tight md:text-6xl">
             Seguridad inteligente para{' '}
-            <span className="text-cyan-400">fintech</span> y{' '}
-            <span className="text-cyan-400">lead-gen</span> en España y la UE
+            <span className="text-gradient-brand">fintech</span> y{' '}
+            <span className="text-gradient-brand">lead-gen</span> en España y la UE
+            </h1>
           </motion.h1>
 
           <motion.p
@@ -82,7 +84,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.25 }}
             className="flex items-center justify-center gap-3"
           >
-            <Button href="/auditoria-gratuita">Solicitar auditoría 0€</Button>
+            <Button className="bg-brand text-black hover:opacity-95">Solicitar auditoría 0€</Button>
             <Button href="/servicios" variant="ghost">
               Ver servicios
             </Button>

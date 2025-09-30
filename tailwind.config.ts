@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    './src/**/*.{ts,tsx}', // покрывает app/, components/, (site)/ и т.д.
+    './src/**/*.{ts,tsx,mdx}', // app/, components/, (site)/ и т.д.
   ],
   theme: {
     extend: {
@@ -14,6 +14,23 @@ const config: Config = {
       letterSpacing: {
         tightest: '-0.04em',
         tighter: '-0.02em',
+      },
+      colors: {
+        // доступ к токенам из CSS-переменных
+        brand: {
+          primary: 'rgb(var(--brand-prim) / <alpha-value>)',     // синий
+          secondary: 'rgb(var(--brand-sec) / <alpha-value>)',    // зелёный
+        },
+      },
+      backgroundImage: {
+        brand: 'linear-gradient(90deg, rgb(var(--brand-prim)) 0%, rgb(var(--brand-sec)) 100%)',
+      },
+      container: {
+        center: true,
+        padding: '1rem',
+        screens: {
+          '2xl': '1280px',
+        },
       },
     },
   },

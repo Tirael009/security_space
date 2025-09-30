@@ -6,7 +6,6 @@ import { useEffect, useId, useState } from 'react';
 import { Shield, Menu, X, ChevronDown } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 
-// ✅ readonly-рекурсивные типы, чтобы дружить с `as const`
 type NavItem = {
   readonly label: string;
   readonly href: string;
@@ -23,13 +22,13 @@ function isActive(pathname: string, href: string) {
 }
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const pathname = usePathname(); // ✅ один раз
   const [scrolled, setScrolled] = useState(false);
   const [openMobile, setOpenMobile] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null); // desktop
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [closeTimer, setCloseTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const labelId = useId();
 
-  // фон при скролле
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6);
     onScroll();
@@ -37,20 +36,37 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // закрываем меню при навигации
   useEffect(() => {
     setOpenMobile(false);
     setOpenDropdown(null);
   }, [pathname]);
 
-  // блокируем прокрутку под мобильным меню
   useEffect(() => {
     const el = document.documentElement;
-    if (openMobile) el.style.overflow = 'hidden';
-    else el.style.overflow = '';
+    el.style.overflow = openMobile ? 'hidden' : '';
   }, [openMobile]);
 
   const primary = siteConfig.nav.primary as readonly NavItem[];
+
+  const openNow = (key: string) => {
+    if (closeTimer) clearTimeout(closeTimer);
+    setOpenDropdown(key);
+  };
+  const closeSoon = () => {
+    if (closeTimer) clearTimeout(closeTimer);
+    setCloseTimer(setTimeout(() => setOpenDropdown(null), 120));
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpenDropdown(null);
+        setOpenMobile(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   return (
     <header
@@ -60,7 +76,6 @@ export default function Navbar() {
       )}
       role="banner"
     >
-      {/* Skip link */}
       <a
         href="#main"
         className="sr-only focus:not-sr-only absolute left-2 top-2 z-[60] rounded bg-white px-3 py-1 text-sm text-black"
@@ -69,7 +84,6 @@ export default function Navbar() {
       </a>
 
       <nav aria-label="Primary" className="mx-auto flex h-[var(--nav-h)] max-w-7xl items-center justify-between px-4">
-        {/* Brand */}
         <Link href="/" className="group inline-flex items-center gap-2" aria-label="Ir al inicio">
           <span className="relative grid place-items-center rounded-lg bg-white/5 p-2">
             <Shield className="size-5 text-cyan-400 transition-transform duration-300 group-hover:scale-110" />
@@ -79,35 +93,38 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop */}
         <ul className="hidden items-center gap-1 md:flex">
           {primary.map((item) =>
             item.children && item.children.length ? (
-              <li key={item.href} className="relative">
+              <li
+                key={item.href}
+                className="relative"
+                onMouseEnter={() => openNow(item.href)}
+                onMouseLeave={closeSoon}
+              >
                 <button
                   type="button"
                   aria-haspopup="menu"
                   aria-expanded={openDropdown === item.href}
-                  onClick={() => setOpenDropdown(openDropdown === item.href ? null : item.href)}
-                  onMouseEnter={() => setOpenDropdown(item.href)}
-                  onMouseLeave={() => setOpenDropdown(null)}
                   className={cn(
                     'flex items-center gap-1 rounded-xl px-3 py-2 text-sm transition-colors',
-                    isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white',
+                    isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white', // ✅ используем pathname
                   )}
+                  onClick={() => setOpenDropdown(openDropdown === item.href ? null : item.href)}
                 >
                   {item.label}
                   <ChevronDown
-                    className={cn('size-4 transition-transform duration-200', openDropdown === item.href && 'rotate-180')}
+                    className={cn(
+                      'size-4 transition-transform duration-200',
+                      openDropdown === item.href && 'rotate-180',
+                    )}
                   />
                 </button>
 
-                {/* Dropdown */}
                 <div
-                  onMouseEnter={() => setOpenDropdown(item.href)}
-                  onMouseLeave={() => setOpenDropdown(null)}
                   className={cn(
-                    'absolute left-1/2 z-50 mt-2 w-[320px] -translate-x-1/2 rounded-2xl border border-white/10 bg-black/90 p-2 backdrop-blur transition-all',
+                    'absolute left-0 top-full z-50 mt-2 w-[320px] rounded-2xl border border-white/10 bg-black/90 p-2 backdrop-blur transition-all',
                     openDropdown === item.href
                       ? 'pointer-events-auto opacity-100 translate-y-0'
                       : 'pointer-events-none opacity-0 -translate-y-2',
@@ -120,7 +137,7 @@ export default function Navbar() {
                       href={item.href}
                       className={cn(
                         'rounded-lg px-3 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5',
-                        isActive(pathname, item.href) && 'text-white',
+                        isActive(pathname, item.href) && 'text-white', // ✅
                       )}
                       role="menuitem"
                     >
@@ -134,7 +151,7 @@ export default function Navbar() {
                         role="menuitem"
                         className={cn(
                           'rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5',
-                          isActive(pathname, child.href) && 'text-white',
+                          isActive(pathname, child.href) && 'text-white', // ✅
                         )}
                       >
                         {child.label}
@@ -144,15 +161,21 @@ export default function Navbar() {
                 </div>
               </li>
             ) : (
-              <li key={item.href}>
+              <li key={item.href} className="relative">
                 <Link
-                  href={item.href}
-                  className={cn(
-                    'rounded-xl px-3 py-2 text-sm transition-colors',
+                    href={item.href}
+                    className={cn(
+                    'relative rounded-xl px-3 py-2 text-sm transition-colors',
                     isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white',
-                  )}
+                    )}
                 >
-                  {item.label}
+                    {item.label}
+                    {/* Active underline */}
+                    {isActive(pathname, item.href) && (
+                    <span
+                        className="absolute left-3 right-3 -bottom-[2px] h-[2px] rounded-full bg-cyan-400 animate-[slideIn_0.3s_ease-out]"
+                    />
+                    )}
                 </Link>
               </li>
             ),
@@ -182,7 +205,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
       <MobileMenu
         open={openMobile}
         onClose={() => setOpenMobile(false)}
@@ -209,7 +231,6 @@ function MobileMenu({
 }) {
   return (
     <div id="mobile-menu" className={cn('md:hidden', open ? 'pointer-events-auto' : 'pointer-events-none')}>
-      {/* overlay */}
       <div
         className={cn(
           'fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity',
@@ -218,10 +239,9 @@ function MobileMenu({
         onClick={onClose}
         aria-hidden="true"
       />
-      {/* drawer */}
       <div
         className={cn(
-          'fixed inset-y-0 right-0 z-50 w-[86%] max-w-sm translate-x-0 border-l border-white/10 bg-black/95 p-4 transition-transform duration-300',
+          'fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm translate-x-0 border-l border-white/10 bg-black/95 p-4 transition-transform duration-300',
           open ? 'translate-x-0' : 'translate-x-full',
         )}
         role="dialog"
@@ -303,7 +323,6 @@ function MobileAccordion({
   onClose: () => void;
 }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div className="rounded-xl border border-white/10">
       <button
@@ -325,12 +344,7 @@ function MobileAccordion({
             Ver todos
           </MobileLink>
           {item.children?.map((child) => (
-            <MobileLink
-              key={child.href}
-              href={child.href}
-              active={isActive(pathname, child.href)}
-              onClick={onClose}
-            >
+            <MobileLink key={child.href} href={child.href} active={isActive(pathname, child.href)} onClick={onClose}>
               {child.label}
             </MobileLink>
           ))}
