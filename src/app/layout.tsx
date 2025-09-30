@@ -21,9 +21,9 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'SecuritySpace — Auditoría de Ciberseguridad para Fintech y Lead-Gen',
+  title: 'SecuritySpace — Auditoría de Ciberseguridad para Fintech',
   description:
-    'Pentest Web/API, Cloud Security Review, Phishing Simulation y cumplimiento RGPD/LOPDGDD. Auditoría de perímetro gratuita para España y la UE.',
+    'Pentest, ASM y QA para empresas (fintech, e-commerce, SaaS) en España y la UE.',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
 

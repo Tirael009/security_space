@@ -34,9 +34,7 @@ export default function Hero() {
             className="mx-auto max-w-4xl text-balance text-4xl font-extrabold tracking-tight md:text-6xl"
           >
             <h1 className="mx-auto max-w-4xl text-balance text-4xl font-extrabold tracking-tight md:text-6xl">
-            Seguridad inteligente para{' '}
-            <span className="text-gradient-brand">fintech</span> y{' '}
-            <span className="text-gradient-brand">lead-gen</span> en España y la UE
+            Seguridad inteligente para <span className="text-gradient-brand">empresas</span> en España y la UE
             </h1>
           </motion.h1>
 
@@ -46,8 +44,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mx-auto max-w-2xl text-pretty text-base text-white/80 md:text-lg"
           >
-            Pentest Web/API, análisis de perímetro (ASM), QA de software, ciberentrenamientos,
-            awareness y cumplimiento RGPD/LOPDGDD. Auditoría pasiva de perímetro en 48–72h — 0€.
+            Pentesting realista, protección de datos, cumplimiento y respuesta a incidentes — todo lo crítico para tu negocio.
           </motion.p>
 
           {/* бейджи-ценности */}

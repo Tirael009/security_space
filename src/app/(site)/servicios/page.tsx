@@ -12,7 +12,7 @@ const services = [
 
 export const metadata = {
   title: 'Servicios — SecuritySpace',
-  description: 'Pentest, ASM y QA para fintech y lead-gen en España y la UE.',
+  description: 'Pentest, ASM y QA para empresas en España y la UE.',
 };
 
 export default function Page() {

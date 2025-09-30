@@ -1,7 +1,6 @@
 export const siteConfig = {
   name: 'SecuritySpace',
-  tagline: 'Auditoría de ciberseguridad para fintech y lead-gen en España y la UE.',
-  url: 'https://securityspace.es',
+  tagline: 'Auditoría y servicios de ciberseguridad ofensiva/defensiva para empresas en España y la UE.',  url: 'https://securityspace.es',
   ogImage: '/images/og.png',
   contact: {
     email: 'hello@securityspace.es',
@@ -27,7 +26,6 @@ export const siteConfig = {
         label: 'Industrias',
         children: [
           { href: '/industrias/fintech', label: 'Fintech & Payments' },
-          { href: '/industrias/leadgen', label: 'Lead-gen & Marketing' },
         ],
       },
 

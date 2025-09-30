@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // 1) Статические страницы сайта
   const staticPages: MetadataRoute.Sitemap = [
-    '',                       // /
+    '',
     '/servicios',
     '/auditoria-gratuita',
     '/metodologia',
@@ -15,9 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/casos',
     '/nosotros',
     '/contacto',
-    // добавили индексные страницы разделов:
-    '/recursos',
-    '/industrias',
   ].map((p) => ({
     url: `${base}${p}`,
     lastModified: now,

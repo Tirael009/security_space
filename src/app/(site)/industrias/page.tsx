@@ -6,12 +6,11 @@ import Link from 'next/link';
 
 const industries = [
   { href: '/industrias/fintech', title: 'Fintech & Payments', desc: 'API security, fraude y cumplimiento para plataformas en crecimiento.' },
-  { href: '/industrias/leadgen', title: 'Lead-gen & Marketing', desc: 'Privacidad, correo y protección de formularios/CRM.' },
 ];
 
 export const metadata = {
   title: 'Industrias — SecuritySpace',
-  description: 'Soluciones por industria: Fintech & Payments, Lead-gen & Marketing.',
+  description: 'Soluciones por industria: Fintech & Payments, e-commerce y SaaS.',
 };
 
 export default function Page() {
