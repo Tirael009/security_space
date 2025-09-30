@@ -26,7 +26,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 export default function ServicesGrid() {
   return (
-    <section className="mx-auto mt-4 max-w-7xl px-4 pb-8">
+    <section id="services" className="mx-auto mt-4 max-w-7xl px-4 pb-8">
       <h2 className="text-center text-2xl font-bold md:text-3xl">Servicios</h2>
       <p className="mx-auto mt-2 max-w-2xl text-center text-white/70">
         Selección de servicios productizados para necesidades reales. Informe claro, priorización y retest.
