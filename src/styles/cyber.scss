@@ -1,0 +1,88 @@
+/* === Киберфон: сетка, сканлайн, орбы, «звёздная пыль» === */
+:root {
+  --brand: 181 100% 45%;     /* бирюза */
+  --brand2: 268 100% 60%;    /* фуксия */
+}
+
+@keyframes pan {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 2000px 0, 0 2000px; }
+}
+
+@keyframes sweep {
+  0%   { transform: translateY(-120%); opacity: .0; }
+  10%  { opacity: .35; }
+  50%  { opacity: .2; }
+  100% { transform: translateY(120%); opacity: .0; }
+}
+
+@keyframes float {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(12px, -8px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes twinkle {
+  0%   { opacity: .15; }
+  50%  { opacity: .35; }
+  100% { opacity: .15; }
+}
+
+.cyber-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 3D-сетка с лёгким перспективным наклоном */
+.cyber-bg__grid {
+  position: absolute;
+  inset: -20% -10% 0 -10%;
+  background-image:
+    linear-gradient( rgba(255,255,255,0.055) 1px, transparent 1px ),
+    linear-gradient( 90deg, rgba(255,255,255,0.055) 1px, transparent 1px );
+  background-size: 60px 60px, 60px 60px;
+  transform: perspective(1000px) rotateX(60deg) translateY(-30%);
+  filter: drop-shadow(0 0 18px hsl(var(--brand) / 0.35));
+  animation: pan 40s linear infinite;
+}
+
+/* Сканирующая полоска (сканлайн), имитирует радар */
+.cyber-bg__scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 255, .18) 50%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  animation: sweep 6s linear infinite;
+}
+
+/* Неоновые орбы (подсветка) */
+.cyber-bg__orb {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 9999px;
+  filter: blur(48px);
+  opacity: 0.24;
+  animation: float 12s ease-in-out infinite;
+}
+.cyber-bg__orb--left  { left: -60px; top: -120px; background: hsl(var(--brand) / 0.75); }
+.cyber-bg__orb--right { right: -80px; top:  40px;  background: hsl(var(--brand2) / 0.65); animation-delay: .6s; }
+
+/* Звёздная пыль (мелкие точки) */
+.cyber-bg__twinkle {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.25) 30%, transparent 40%),
+    radial-gradient(2px 2px at 80% 10%, rgba(255,255,255,.2) 30%, transparent 40%),
+    radial-gradient(1.5px 1.5px at 60% 70%, rgba(255,255,255,.2) 30%, transparent 40%),
+    radial-gradient(1.5px 1.5px at 25% 80%, rgba(255,255,255,.25) 30%, transparent 40%);
+  animation: twinkle 7s ease-in-out infinite;
+}
