@@ -1,0 +1,101 @@
+Ñòðóêòóðà ïàïîê
+Ñåðèéíûé íîìåð òîìà: EE10-9F51
+C:\USERS\IVAN\DESKTOP\SECURITY_SPACE\SRC
++---app
+¦   ¦   favicon.ico
+¦   ¦   globals.css
+¦   ¦   layout.tsx
+¦   ¦   opengraph-image.tsx
+¦   ¦   sitemap.ts
+¦   ¦   
+¦   +---(legal)
+¦   ¦   +---aviso-legal
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---dpa
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---politica-de-cookies
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---politica-de-privacidad
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   L---scc
+¦   ¦           page.tsx
+¦   ¦           
+¦   +---(site)
+¦   ¦   ¦   page.tsx
+¦   ¦   ¦   
+¦   ¦   +---auditoria-gratuita
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---casos
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---contacto
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---cumplimiento
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---metodologia
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   +---nosotros
+¦   ¦   ¦       page.tsx
+¦   ¦   ¦       
+¦   ¦   L---servicios
+¦   ¦       ¦   page.tsx
+¦   ¦       ¦   
+¦   ¦       L---[slug]
+¦   ¦               page.tsx
+¦   ¦               
+¦   +---api
+¦   ¦   +---contact
+¦   ¦   ¦       route.ts
+¦   ¦   ¦       
+¦   ¦   L---free-audit
+¦   ¦           route.ts
+¦   ¦           
+¦   L---robots.txt
+¦           route.ts
+¦           
++---components
+¦   +---forms
+¦   ¦       ContactForm.tsx
+¦   ¦       FreeAuditForm.tsx
+¦   ¦       
+¦   +---layout
+¦   ¦       Footer.tsx
+¦   ¦       Navbar.tsx
+¦   ¦       
+¦   +---sections
+¦   ¦       CTA.tsx
+¦   ¦       Hero.tsx
+¦   ¦       Partners.tsx
+¦   ¦       Process.tsx
+¦   ¦       ServicesGrid.tsx
+¦   ¦       
+¦   L---ui
+¦           Button.tsx
+¦           Card.tsx
+¦           Input.tsx
+¦           Textarea.tsx
+¦           
++---config
+¦       site.ts
+¦       
++---data
+¦       process.ts
+¦       services.ts
+¦       
++---lib
+¦       mail.ts
+¦       seo.ts
+¦       utils.ts
+¦       validations.ts
+¦       
+L---styles
+        tokens.css
+        
