@@ -51,7 +51,10 @@ const PRIMARY_ORDER: string[] = [
 ];
 
 /* ============================ Tarjeta ============================ */
-const CARD_H = 230; // одинаковая высота
+/** ЕДИНАЯ ВЫСОТА карточки (контент внутри подклинен по высоте). */
+const CARD_H = 240;
+const TITLE_MIN_H = 44;   // ~2 строки
+const EXCERPT_MIN_H = 44; // ~2 строки
 
 function ServiceCard({ s }: { s: Service }) {
   const Icon = s.icon;
@@ -62,7 +65,7 @@ function ServiceCard({ s }: { s: Service }) {
         border border-sky-500/20 bg-[#070a0a]/80 backdrop-blur ring-1 ring-white/5
         shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]
         transition-transform duration-300 hover:-translate-y-0.5
-        hover:shadow-[0_0_0_1px_rgba(56,189,248,0.25),0_10px_36px_-10px_rgба(56,189,248,0.25)]
+        hover:shadow-[0_0_0_1px_rgba(56,189,248,0.25),0_10px_36px_-10px_rgba(56,189,248,0.25)]
       "
       style={{ height: CARD_H }}
     >
@@ -83,7 +86,13 @@ function ServiceCard({ s }: { s: Service }) {
           </span>
           <h3
             className="font-heading text-[16.5px] font-extrabold leading-snug text-white"
-            style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+            style={{
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              minHeight: TITLE_MIN_H,
+            }}
             title={s.title}
           >
             {s.title}
@@ -92,7 +101,13 @@ function ServiceCard({ s }: { s: Service }) {
 
         <p
           className="mt-1 text-[14.5px] leading-relaxed text-white/80"
-          style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: 44 }}
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            minHeight: EXCERPT_MIN_H,
+          }}
           title={s.excerpt}
         >
           {s.excerpt}
@@ -112,7 +127,7 @@ function ServiceCard({ s }: { s: Service }) {
   );
 }
 
-/* ============================ Carrusel móvil (без паузы) ============================ */
+/* ============================ Carrusel móvil ============================ */
 function MobileMarquee({ items, speed = 44 }: { items: Service[]; speed?: number }) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -172,7 +187,8 @@ function MobileMarquee({ items, speed = 44 }: { items: Service[]; speed?: number
       }
       if (dragRef.current.dragging) xRef.current = dragRef.current.startVal + dx;
     };
-    const endDrag = (e: PointerEvent) => {
+    // ✅ фикс ESLint: параметр не используется — убрали его
+    const endDrag = () => {
       if (dragRef.current.dragging && pointerIdRef.current != null) wrap.releasePointerCapture(pointerIdRef.current);
       dragRef.current = { primed: false, dragging: false, startX: 0, startVal: 0 };
       pointerIdRef.current = null;
@@ -197,7 +213,12 @@ function MobileMarquee({ items, speed = 44 }: { items: Service[]; speed?: number
       className="relative select-none overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-[#0b0e11]/90 to-black/90 py-4 touch-pan-y md:hidden"
       aria-label="Lista de servicios: carrusel continuo (móvil)"
     >
-      <div ref={trackRef} className="relative z-20 flex h-[300px] items-center" style={{ willChange: 'transform' }}>
+      {/* высота трека под высоту карточки */}
+      <div
+        ref={trackRef}
+        className="relative z-20 flex items-center"
+        style={{ willChange: 'transform', height: CARD_H + 40 }}
+      >
         {doubled.map((s, i) => (
           <div key={`${s.slug}-${i}`} className="mx-3 w-[320px]">
             <ServiceCard s={s} />
@@ -228,7 +249,7 @@ function DesktopGrid({ items }: { items: Service[] }) {
 
   const moreCount = rest.length;
 
-  // фиксируем число колонок: 1 / 2 / 3 / 4 и НЕ больше 4 даже на очень широких экранах
+  // фиксируем число колонок до 4
   const gridCols =
     'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4';
 
@@ -242,7 +263,10 @@ function DesktopGrid({ items }: { items: Service[] }) {
       </div>
 
       {/* скрытая часть — плавно “выплывает” */}
-      <div className={`mt-6 grid transition-all duration-500 ease-out ${expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+      <div
+        id="more-services"
+        className={`mt-6 grid transition-all duration-500 ease-out ${expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+      >
         <div className="overflow-hidden">
           <div className={gridCols}>
             {rest.map((s) => (
@@ -276,8 +300,8 @@ export default function ServicesGrid() {
       id="services"
       className="
         mx-auto mt-16 max-w-7xl scroll-mt-[var(--nav-h)] px-4
-        mb-24 md:mb-22  /* БОЛЬШОЙ отступ снизу секции */
-        pb-2           /* небольшой внутренний нижний паддинг */
+        mb-24 md:mb-22
+        pb-2
       "
       aria-labelledby="services-title"
     >
@@ -291,7 +315,7 @@ export default function ServicesGrid() {
         </p>
       </header>
 
-      {/* móvil: carrusel; desktop: 8 карточек + раскрытие (фиксированные колонки: 1/2/3/4) */}
+      {/* móvil: carrusel; desktop: 8 карточек + раскрытие */}
       <MobileMarquee items={SERVICES} />
       <DesktopGrid items={SERVICES} />
     </section>

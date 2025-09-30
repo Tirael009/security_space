@@ -24,7 +24,10 @@ export const metadata: Metadata = {
   title: 'SecuritySpace — Auditoría de Ciberseguridad para Fintech',
   description:
     'Pentest, ASM y QA para empresas (fintech, e-commerce, SaaS) en España y la UE.',
-  icons: [{ rel: 'icon', url: '/favicon.ico' }],
+  icons: [
+    { rel: 'icon', url: '/logo.png' },       // ✅ фавикон
+    { rel: 'apple-touch-icon', url: '/logo.png' },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

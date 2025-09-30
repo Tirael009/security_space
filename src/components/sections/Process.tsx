@@ -9,12 +9,12 @@ import { Check, Shield, Workflow, Wrench } from 'lucide-react';
  *  el canvas no se redimensiona al expandir tarjetas → la animación no se reinicia.
  */
 const MatrixRainBg = memo(function MatrixRainBg({
-  colors = ['#38bdf8','#10b981'], // sky-400 → emerald-500
+  colors = ['#38bdf8', '#10b981'], // cyan (sky-400) → emerald-500
   fontSize = 14,
   trailOpacity = 0.09,
   speed = 46,
 }: {
-  colors?: string[]; // два и более цветов — будет интерполяция по ширине
+  colors?: string[];
   fontSize?: number;
   trailOpacity?: number;
   speed?: number;
@@ -85,7 +85,6 @@ const MatrixRainBg = memo(function MatrixRainBg({
       ctx.fillRect(0, 0, baseW, baseH);
 
       for (let i = 0; i < drops.length; i++) {
-        // цвет по колонке (0..1)
         const t = drops.length <= 1 ? 0 : i / (drops.length - 1);
         ctx.fillStyle = grad(t);
 
@@ -156,11 +155,19 @@ const STEPS: Step[] = [
 ];
 
 /* ================================ UI helpers ================================ */
+
+const CARD_MIN_H = 260;           // ← одинаковая высота карточек
+const TITLE_MIN_H = 48;           // ~2 строки
+const PARAGRAPH_MIN_H = 66;       // ~3 строки
+
 function NumBadge({ n }: { n: number }) {
+  // Номер в градиенте матрицы + аккуратное свечение, без синего
   return (
-    <div className="relative grid size-9 place-items-center rounded-full bg-black/70 text-sky-300 ring-1 ring-sky-500/30 md:size-10">
-      <span className="text-sm font-semibold md:text-base">{n}</span>
-      <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,.35),transparent_62%)]" />
+    <div className="relative grid size-10 place-items-center rounded-full ring-1 ring-white/10 bg-black/70 md:size-11">
+      <span className="bg-gradient-to-r from-cyan-400 via-emerald-300 to-cyan-400 bg-clip-text text-transparent font-mono text-base font-semibold md:text-lg">
+        {String(n).padStart(2, '0')}
+      </span>
+      <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.28),transparent_62%)]" />
     </div>
   );
 }
@@ -180,45 +187,55 @@ function StepCard({ step, index }: { step: Step; index: number }) {
   return (
     <article
       className="
-        group relative flex flex-col overflow-hidden rounded-3xl
-        border border-sky-500/20 bg-[#070a0a]/80 backdrop-blur
+        group relative flex h-full flex-col overflow-hidden rounded-3xl
+        border border-white/10 bg-[#070a0a]/80 backdrop-blur
         ring-1 ring-white/5
         shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]
         before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] before:bg-[length:100%_10px] before:opacity-0 before:transition-opacity before:duration-300
-        hover:before:opacity-100 hover:shadow-[0_0_0_1px_rgba(56,189,248,0.25),0_20px_60px_-15px_rgba(56,189,248,0.25)]
+        hover:before:opacity-100 hover:shadow-[0_0_0_1px_rgba(16,185,129,0.25),0_20px_60px_-15px_rgba(16,185,129,0.25)]
       "
+      style={{ minHeight: CARD_MIN_H }}
     >
-      {/* contorno degradado superior */}
-      <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-sky-400 via-blue-400 to-cyan-400 opacity-90" />
+      {/* contorno degradado superior — matriz (cyan→emerald→cyan) */}
+      <div className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-cyan-400 via-emerald-300 to-cyan-400 opacity-95" />
       {/* contorno degradado inferior */}
-      <div className="absolute inset-x-0 bottom-0 h-[3px] bg-gradient-to-r from-cyan-400 via-blue-400 to-sky-400 opacity-90" />
+      <div className="absolute inset-x-0 bottom-0 h-[3px] bg-gradient-to-r from-emerald-300 via-cyan-400 to-emerald-300 opacity-95" />
 
-      <div className="relative z-10 flex flex-col p-6 md:p-7">
+      <div className="relative z-10 flex flex-1 flex-col p-6 md:p-7">
         {/* cabecera */}
         <div className="mb-4 flex items-center gap-3">
           <NumBadge n={index + 1} />
-          <span className="rounded-md border border-sky-500/30 bg-sky-400/5 px-2 py-0.5 text-[10px] font-medium tracking-[0.18em] text-sky-300 md:text-[11px]">
+          <span className="rounded-md border border-white/10 bg-white/0 px-2 py-0.5 text-[10px] font-medium tracking-[0.18em] text-transparent md:text-[11px] bg-gradient-to-r from-cyan-400 via-emerald-300 to-cyan-400 bg-clip-text">
             {step.band}
           </span>
         </div>
 
         <div className="mb-2 flex items-start gap-3">
-          <span className="grid size-9 place-items-center rounded-lg bg-sky-400/5 ring-1 ring-sky-500/25 md:size-10">
-            <Icon className="size-5 text-sky-300 md:size-6" />
+          <span className="grid size-10 place-items-center rounded-lg bg-emerald-400/5 ring-1 ring-emerald-300/25">
+            <Icon className="size-6 text-emerald-300" />
           </span>
-          <h3 className="font-heading text-xl font-extrabold leading-snug text-white md:text-2xl">
+          <h3
+            className="font-heading text-xl font-extrabold leading-snug text-white md:text-2xl"
+            style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: TITLE_MIN_H }}
+            title={step.title}
+          >
             {step.title}
           </h3>
         </div>
 
-        <p className="text-[14.5px] leading-relaxed text-white/85 md:text-[15px]">{step.paragraph}</p>
+        <p
+          className="text-[14.5px] leading-relaxed text-white/85 md:text-[15px]"
+          style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', minHeight: PARAGRAPH_MIN_H }}
+          title={step.paragraph}
+        >
+          {step.paragraph}
+        </p>
 
-        {/* detalles — solo se expanden en esta tarjeta */}
         <Collapsible open={open}>
           <ul className="mt-3 space-y-2.5">
             {step.bullets.map((b) => (
               <li key={b} className="flex items-start gap-2 text-white/90">
-                <Check className="mt-[2px] size-4 shrink-0 text-sky-400" />
+                <Check className="mt-[2px] size-4 shrink-0 text-emerald-300" />
                 <span className="text-[14.5px] leading-relaxed">{b}</span>
               </li>
             ))}
@@ -230,15 +247,10 @@ function StepCard({ step, index }: { step: Step; index: number }) {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="inline-flex items-center gap-2 rounded-lg border border-sky-500/30 bg-sky-400/5 px-3 py-2 text-sm font-medium text-sky-200 transition hover:bg-sky-400/10"
+            className="inline-flex items-center gap-2 rounded-lg border border-emerald-400/30 bg-emerald-300/5 px-3 py-2 text-sm font-medium text-emerald-200 transition hover:bg-emerald-300/10"
           >
             {open ? 'Ocultar' : 'Más detalles'}
-            <svg
-              className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`}
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden
-            >
+            <svg className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor" aria-hidden>
               <path d="M5.23 7.21a.75.75 0 011.06.02L10 11.116l3.71-3.886a.75.75 0 111.08 1.04l-4.24 4.44a.75.75 0 01-1.08 0l-4.24-4.44a.75.75 0 01.02-1.06z" />
             </svg>
           </button>
@@ -252,9 +264,8 @@ function StepCard({ step, index }: { step: Step; index: number }) {
 export default function Process() {
   return (
     <div id="process" className="mx-auto max-w-7xl px-4">
-      {/* “Cápsula”: cabecera fuera de la lluvia, cuerpo con lluvia */}
       <div className="mx-auto max-w-6xl">
-        {/* cabecera (parte visual de la sección, sin lluvia) */}
+        {/* cabecera (fuera de la lluvia) */}
         <div className="relative z-20 rounded-t-3xl border border-white/10 border-b-0 bg-[#0b0e11]/90 px-6 py-8 text-center backdrop-blur">
           <h2 className="font-heading text-3xl font-extrabold tracking-tight text-white md:text-4xl">
             CÓMO TRABAJAMOS
@@ -262,7 +273,8 @@ export default function Process() {
           <p className="mx-auto mt-2 max-w-2xl text-white/75">
             Análisis → acuerdo → implantación. Informes, priorización por riesgo y retest incluidos.
           </p>
-          <div className="mx-auto mt-3 h-0.5 w-24 rounded bg-sky-400/85" />
+          {/* разделитель также в палитре матрицы */}
+          <div className="mx-auto mt-3 h-0.5 w-24 rounded bg-gradient-to-r from-cyan-400 via-emerald-300 to-cyan-400" />
         </div>
 
         {/* cuerpo con lluvia */}
@@ -272,7 +284,7 @@ export default function Process() {
         >
           <MatrixRainBg />
 
-          {/* viñeta suave para legibilidad */}
+          {/* vineta para legibilidad */}
           <div
             className="pointer-events-none absolute inset-0 z-10"
             style={{
@@ -281,8 +293,8 @@ export default function Process() {
             }}
           />
 
-          {/* 1 columna en móvil/tablet, 3 en desktop; otras tarjetas no cambian al expandir una */}
-          <div className="relative z-20 mx-auto grid max-w-6xl grid-cols-1 items-start gap-6 px-3 lg:grid-cols-3">
+          {/* grid: одинаковая высота за счёт items-stretch + minHeight на карточке */}
+          <div className="relative z-20 mx-auto grid max-w-6xl grid-cols-1 items-stretch gap-6 px-3 lg:grid-cols-3">
             {STEPS.map((s, i) => (
               <StepCard key={s.title} step={s} index={i} />
             ))}

@@ -19,7 +19,11 @@ const config: Config = {
         // доступ к токенам из CSS-переменных
         brand: {
           primary: 'rgb(var(--brand-prim) / <alpha-value>)',     // синий
-          secondary: 'rgb(var(--brand-sec) / <alpha-value>)',    // зелёный
+          secondary: 'rgb(var(--brand-sec) / <alpha-value>)',  
+          cyberBlue: '#1e3a8a',     // s-900 → темно-синий
+          neonBlue:  '#3b82f6',     // s-500
+          neonViolet:'#7c3aed',     // v-600
+          matrixGreen:'#00ff95',    // неон-зелёный акцент  // зелёный
         },
       },
       backgroundImage: {

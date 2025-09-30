@@ -5,6 +5,7 @@ import PartnersMarquee from '@/components/sections/PartnersMarquee';
 import ServicesGrid from '@/components/sections/ServicesGrid';
 import Process from '@/components/sections/Process';
 import CTA from '@/components/sections/CTA';
+import Contact from '@/components/sections/Contact';
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
         <ServicesGrid />
         <Process />
         <CTA />
+        <Contact />
       </main>
       <Footer />
     </>
