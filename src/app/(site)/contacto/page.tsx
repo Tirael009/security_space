@@ -1,5 +1,4 @@
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 import PageHeader from '@/components/sections/PageHeader';
 import Section from '@/components/sections/Section';
 import Link from 'next/link';
@@ -25,7 +24,6 @@ export default function Page() {
           </div>
         </Section>
       </main>
-      <Footer />
     </>
   );
 }

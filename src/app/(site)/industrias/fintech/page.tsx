@@ -1,5 +1,4 @@
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 import PageHeader from '@/components/sections/PageHeader';
 import Section from '@/components/sections/Section';
 import JsonLd from '@/components/seo/JsonLd';
@@ -98,7 +97,6 @@ export default function FintechPage() {
           </div>
         </Section>
       </main>
-      <Footer />
 
       <JsonLd data={ld} />
     </>

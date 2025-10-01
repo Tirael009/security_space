@@ -1,42 +1,35 @@
+// src/config/site.ts
 export const siteConfig = {
-  name: 'SecuritySpace',
-  tagline: 'Auditoría y servicios de ciberseguridad ofensiva/defensiva para empresas en España y la UE.',  url: 'https://securityspace.es',
-  ogImage: '/images/og.png',
-  contact: {
-    email: 'hello@securityspace.es',
+  name: 'CosmaGuard',
+  domain: 'cosmaguard.io', // ← поменяй на реальный домен/поддомен
+  locale: 'es-ES',
+  tagline:
+    'Ciberseguridad B2B: pentest, ASM y respuesta para entornos híbridos.',
+  cta: { href: '/auditoria-gratuita', label: 'Auditoría 0€' },
+  social: {
+    linkedin: 'https://www.linkedin.com/company/cosmaguard', // opt
+    twitter: 'https://x.com/cosmaguard',                      // opt
+    github: 'https://github.com/cosmaguard',                  // opt
   },
-
-  // Единый источник правды для меню
   nav: {
     primary: [
-      { href: '/', label: 'Inicio' },
-
+      { label: 'Inicio', href: '/' },
       {
-        href: '/servicios',
         label: 'Servicios',
+        href: '/servicios',
         children: [
-          { href: '/servicios/pentest', label: 'Pentest Web/API' },
-          { href: '/servicios/attack-surface-monitoring', label: 'ASM (Perímetro)' },
-          { href: '/servicios/quality-assessment', label: 'QA de software' },
+          { label: 'Pentest', href: '/servicios/pentest' },
+          { label: 'ASM', href: '/servicios/asm' },
+          { label: 'QA', href: '/servicios/qa' },
         ],
       },
-
-      {
-        href: '/industrias',
-        label: 'Industrias',
-        children: [
-          { href: '/industrias/fintech', label: 'Fintech & Payments' },
-        ],
-      },
-
-      { href: '/recursos', label: 'Recursos' },
-      { href: '/casos', label: 'Casos' },
-      { href: '/metodologia', label: 'Metodología' },
-      { href: '/cumplimiento', label: 'Cumplimiento' },
-      { href: '/contacto', label: 'Contacto' },
-    ] as const,
+      { label: 'Recursos', href: '/recursos' },
+      { label: 'Casos', href: '/casos' },
+      { label: 'Metodología', href: '/metodologia' },
+      { label: 'Cumplimiento', href: '/cumplimiento' },
+      { label: 'Contacto', href: '/contacto' },
+    ],
   },
-
-  // Отдельный CTA для кнопки справа
-  cta: { href: '/auditoria-gratuita', label: 'Auditoría 0€' } as const,
 } as const;
+
+export type SiteConfig = typeof siteConfig;

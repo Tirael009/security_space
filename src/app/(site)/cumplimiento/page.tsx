@@ -1,5 +1,4 @@
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 import PageHeader from '@/components/sections/PageHeader';
 import Section from '@/components/sections/Section';
 
@@ -22,7 +21,6 @@ export default function Page() {
           </ul>
         </Section>
       </main>
-      <Footer />
     </>
   );
 }

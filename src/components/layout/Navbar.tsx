@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { siteConfig } from '@/config/site';
 import Image from "next/image";
@@ -23,44 +23,12 @@ function isActive(pathname: string, href: string) {
 }
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const pathname = usePathname(); // ✅ один раз
   const [scrolled, setScrolled] = useState(false);
   const [openMobile, setOpenMobile] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [closeTimer, setCloseTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [hasOverflow, setHasOverflow] = useState(false);
   const labelId = useId();
-  const navRef = useRef<HTMLUListElement>(null);
-
-  useEffect(() => {
-    const updateNavHeight = () => {
-      const height = document.querySelector('header')?.offsetHeight || 64;
-      document.documentElement.style.setProperty('--nav-h', `${height}px`);
-    };
-
-    updateNavHeight();
-    window.addEventListener('resize', updateNavHeight);
-    window.addEventListener('orientationchange', updateNavHeight);
-
-    return () => {
-      window.removeEventListener('resize', updateNavHeight);
-      window.removeEventListener('orientationchange', updateNavHeight);
-    };
-  }, []);
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (navRef.current) {
-        const { scrollWidth, clientWidth } = navRef.current;
-        setHasOverflow(scrollWidth > clientWidth);
-      }
-    };
-
-    checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-
-    return () => window.removeEventListener('resize', checkOverflow);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 6);
@@ -85,7 +53,6 @@ export default function Navbar() {
     if (closeTimer) clearTimeout(closeTimer);
     setOpenDropdown(key);
   };
-
   const closeSoon = () => {
     if (closeTimer) clearTimeout(closeTimer);
     setCloseTimer(setTimeout(() => setOpenDropdown(null), 120));
@@ -118,89 +85,114 @@ export default function Navbar() {
       </a>
 
       <nav aria-label="Primary" className="mx-auto flex h-[var(--nav-h)] max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="group inline-flex items-center gap-2 shrink-0" aria-label="Ir al inicio">
-          <Image
+        <Link href="/" className="group inline-flex items-center gap-2" aria-label="Ir al inicio">
+        <Image
             src="/logo.png"
-            alt="CosmaGuard logo"
+            alt="SecuritySpace logo"
             width={32}
             height={32}
             priority
             className="rounded-md"
-          />
-          <span className="text-sm font-semibold tracking-wide bg-gradient-to-r from-cyan-400 to-emerald-300 bg-clip-text text-transparent">
-            CosmaGuard
-          </span>
+        />
+        <span
+        className="text-sm font-semibold tracking-wide bg-gradient-to-r from-cyan-400 to-emerald-300 bg-clip-text text-transparent"
+        >
+        CosmaGuard
+        </span>
+
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex min-w-0 flex-1 justify-center">
-          <div 
-            className={cn(
-              "relative min-w-0 max-w-2xl",
-              hasOverflow && "after:absolute after:right-0 after:top-0 after:bottom-0 after:w-8 after:bg-gradient-to-l after:from-black/70 after:to-transparent"
-            )}
-          >
-            <ul 
-              ref={navRef}
-              className={cn(
-                "flex items-center gap-1 min-w-0 overflow-x-auto scrollbar-hide",
-                hasOverflow && "pb-1"
-              )}
-            >
-              {primary.map((item) =>
-                item.children && item.children.length ? (
-                  <li
-                    key={item.href}
-                    className="relative shrink-0"
-                    onMouseEnter={() => openNow(item.href)}
-                    onMouseLeave={closeSoon}
-                  >
-                    <button
-                      type="button"
-                      aria-haspopup="menu"
-                      aria-expanded={openDropdown === item.href}
-                      className={cn(
-                        'flex items-center gap-1 rounded-xl px-3 py-2 text-sm transition-colors shrink-0',
-                        isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white',
-                      )}
-                      onClick={() => setOpenDropdown(openDropdown === item.href ? null : item.href)}
-                    >
-                      {item.label}
-                      <ChevronDown
-                        className={cn(
-                          'size-4 transition-transform duration-200',
-                          openDropdown === item.href && 'rotate-180',
-                        )}
-                      />
-                    </button>
-
-                    {openDropdown === item.href && (
-                      <DropdownPanel item={item} pathname={pathname} />
+        <ul className="hidden items-center gap-1 md:flex">
+          {primary.map((item) =>
+            item.children && item.children.length ? (
+              <li
+                key={item.href}
+                className="relative"
+                onMouseEnter={() => openNow(item.href)}
+                onMouseLeave={closeSoon}
+              >
+                <button
+                  type="button"
+                  aria-haspopup="menu"
+                  aria-expanded={openDropdown === item.href}
+                  className={cn(
+                    'flex items-center gap-1 rounded-xl px-3 py-2 text-sm transition-colors',
+                    isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white', // ✅ используем pathname
+                  )}
+                  onClick={() => setOpenDropdown(openDropdown === item.href ? null : item.href)}
+                >
+                  {item.label}
+                  <ChevronDown
+                    className={cn(
+                      'size-4 transition-transform duration-200',
+                      openDropdown === item.href && 'rotate-180',
                     )}
-                  </li>
-                ) : (
-                  <li key={item.href} className="relative shrink-0">
+                  />
+                </button>
+
+                <div
+                  className={cn(
+                    'absolute left-0 top-full z-50 mt-2 w-[320px] rounded-2xl border border-white/10 bg-black/90 p-2 backdrop-blur transition-all',
+                    openDropdown === item.href
+                      ? 'pointer-events-auto opacity-100 translate-y-0'
+                      : 'pointer-events-none opacity-0 -translate-y-2',
+                  )}
+                  role="menu"
+                  aria-label={item.label}
+                >
+                  <div className="grid">
                     <Link
                       href={item.href}
                       className={cn(
-                        'relative rounded-xl px-3 py-2 text-sm transition-colors block shrink-0',
-                        isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white',
+                        'rounded-lg px-3 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5',
+                        isActive(pathname, item.href) && 'text-white', // ✅
                       )}
+                      role="menuitem"
                     >
-                      {item.label}
-                      {isActive(pathname, item.href) && (
-                        <span className="absolute left-3 right-3 -bottom-[2px] h-[2px] rounded-full bg-cyan-400 animate-[slideIn_0.3s_ease-out]" />
-                      )}
+                      Ver todos
                     </Link>
-                  </li>
-                ),
-              )}
-            </ul>
-          </div>
-        </div>
+                    <div className="my-1 h-px bg-white/10" />
+                    {item.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        role="menuitem"
+                        className={cn(
+                          'rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5',
+                          isActive(pathname, child.href) && 'text-white', // ✅
+                        )}
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </li>
+            ) : (
+              <li key={item.href} className="relative">
+                <Link
+                    href={item.href}
+                    className={cn(
+                    'relative rounded-xl px-3 py-2 text-sm transition-colors',
+                    isActive(pathname, item.href) ? 'text-white' : 'text-white/80 hover:text-white',
+                    )}
+                >
+                    {item.label}
+                    {/* Active underline */}
+                    {isActive(pathname, item.href) && (
+                    <span
+                        className="absolute left-3 right-3 -bottom-[2px] h-[2px] rounded-full bg-cyan-400 animate-[slideIn_0.3s_ease-out]"
+                    />
+                    )}
+                </Link>
+              </li>
+            ),
+          )}
+        </ul>
 
         {/* CTA + Burger */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2">
           <Link
             href={siteConfig.cta.href}
             className="hidden rounded-xl border border-white/15 bg-white px-3 py-1.5 text-sm font-semibold text-black transition hover:bg-white/90 md:inline-flex"
@@ -233,76 +225,6 @@ export default function Navbar() {
   );
 }
 
-function DropdownPanel({ item, pathname }: { item: NavItem; pathname: string }) {
-  const panelRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ left: 0, top: 0, width: 0 });
-
-  useEffect(() => {
-    const updatePosition = () => {
-      const trigger = document.querySelector(`[aria-expanded="true"]`) as HTMLElement;
-      if (trigger && panelRef.current) {
-        const rect = trigger.getBoundingClientRect();
-        const panelWidth = Math.min(320, window.innerWidth * 0.92);
-        setPosition({
-          left: rect.left + rect.width / 2 - panelWidth / 2,
-          top: rect.bottom,
-          width: panelWidth,
-        });
-      }
-    };
-
-    updatePosition();
-    window.addEventListener('resize', updatePosition);
-    window.addEventListener('scroll', updatePosition);
-
-    return () => {
-      window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={panelRef}
-      className="fixed z-50 rounded-2xl border border-white/10 bg-black/90 p-2 backdrop-blur transition-all"
-      style={{
-        left: `${Math.max(8, Math.min(position.left, window.innerWidth - position.width - 8))}px`,
-        top: `${position.top}px`,
-        width: `${position.width}px`,
-      }}
-      role="menu"
-      aria-label={item.label}
-    >
-      <div className="grid">
-        <Link
-          href={item.href}
-          className={cn(
-            'rounded-lg px-3 py-2 text-xs uppercase tracking-wider text-white/60 hover:bg-white/5',
-            isActive(pathname, item.href) && 'text-white',
-          )}
-          role="menuitem"
-        >
-          Ver todos
-        </Link>
-        <div className="my-1 h-px bg-white/10" />
-        {item.children?.map((child) => (
-          <Link
-            key={child.href}
-            href={child.href}
-            role="menuitem"
-            className={cn(
-              'rounded-lg px-3 py-2 text-sm text-white/80 hover:bg-white/5',
-              isActive(pathname, child.href) && 'text-white',
-            )}
-          >
-            {child.label}
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function MobileMenu({
   open,
   onClose,
@@ -328,7 +250,7 @@ function MobileMenu({
       />
       <div
         className={cn(
-          'fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm translate-x-0 border-l border-white/10 bg-black/95 p-4 transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)]',
+          'fixed inset-y-0 right-0 z-50 w-[88%] max-w-sm translate-x-0 border-l border-white/10 bg-black/95 p-4 transition-transform duration-300',
           open ? 'translate-x-0' : 'translate-x-full',
         )}
         role="dialog"
@@ -336,17 +258,17 @@ function MobileMenu({
         aria-label="Menú de navegación"
       >
         <div className="mb-2 flex items-center justify-between">
-          <Link href="/" className="group inline-flex items-center gap-2" aria-label="Ir al inicio" onClick={onClose}>
+          <Link href="/" className="group inline-flex items-center gap-2" aria-label="Ir al inicio">
             <Image
-              src="/logo.png"
-              alt="CosmaGuard logo"
-              width={32}
-              height={32}
-              priority
-              className="rounded-md"
+                src="/logo.png"
+                alt="SecuritySpace logo"
+                width={32}
+                height={32}
+                priority
+                className="rounded-md"
             />
-            <span className="text-sm font-semibold tracking-wide bg-gradient-to-r from-cyan-400 to-emerald-300 bg-clip-text text-transparent">
-              CosmaGuard
+            <span className="text-sm font-semibold tracking-wide">
+                <span className="text-cyan-400">Security</span>Space
             </span>
           </Link>
           <button type="button" className="rounded-lg p-2 hover:bg-white/10" onClick={onClose} aria-label="Cerrar">
@@ -396,7 +318,7 @@ function MobileLink({
       href={href}
       onClick={onClick}
       className={cn(
-        'block rounded-lg px-3 py-2 text-sm transition-colors',
+        'block rounded-lg px-3 py-2 text-sm',
         active ? 'bg-white/10 text-white' : 'text-white/80 hover:bg-white/5 hover:text-white',
       )}
     >

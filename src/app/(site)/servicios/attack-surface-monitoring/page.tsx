@@ -1,5 +1,4 @@
 import Navbar from '@/components/layout/Navbar';
-import Footer from '@/components/layout/Footer';
 import PageHeader from '@/components/sections/PageHeader';
 import Section from '@/components/sections/Section';
 import FAQ, { type QA } from '@/components/sections/FAQ';
@@ -115,7 +114,6 @@ export default function ASMPage() {
           </div>
         </Section>
       </main>
-      <Footer />
 
       {/* JSON-LD */}
       <JsonLd data={ldService} />
