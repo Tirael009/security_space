@@ -7,7 +7,8 @@ import { ShieldCheck, FileText, RotateCcw, Fingerprint } from 'lucide-react';
 export default function Hero() {
   return (
     <section
-      className="relative isolate min-h-[calc(100dvh-var(--nav-h))] pt-[var(--nav-h)]"
+      // Короче по высоте: сразу поднимаем контент на всех брейкпоинтах
+      className="relative isolate min-h-[calc(100svh-var(--nav-h)-8rem)] md:min-h-[calc(100dvh-var(--nav-h)-6rem)] pt-[var(--nav-h)]"
       aria-label="Ciberseguridad para empresas"
     >
       {/* Fondo */}
@@ -19,22 +20,27 @@ export default function Hero() {
         className="absolute inset-0 -z-10 [background:radial-gradient(60%_50%_at_50%_40%,rgba(0,0,0,.45),transparent_70%)]"
       />
 
-      {/* Degradado inferior */}
+      {/* Degradado inferior — ниже и тоньше, чтобы не скрывать CTA */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-black/60"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-12 md:h-16 bg-gradient-to-b from-transparent to-black/60"
       />
 
-      <div className="relative mx-auto flex min-h-[calc(100dvh-var(--nav-h))] max-w-7xl flex-col items-center justify-center px-4 text-center">
-        <div className="w-full space-y-7 md:space-y-10 lg:space-y-12">
-          {/* Kicker (оставляю) */}
+      {/* Контейнер контента: на мобиле тянем вверх, на десктопе почти центр */}
+      <div
+        className="relative mx-auto flex max-w-7xl flex-col items-center
+                   justify-start md:justify-center
+                   px-4 pb-24 md:pb-28 text-center"
+      >
+        <div className="w-full space-y-5 md:space-y-7 lg:space-y-8">
+          {/* Kicker */}
           <p className="mx-auto inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-wider text-white/70">
             Ciberseguridad B2B <span className="opacity-40">•</span> Pentest
             <span className="opacity-40">•</span> ASM
             <span className="opacity-40">•</span> Respuesta
           </p>
 
-          {/* H1 — “Безопасное цифровое будущее” на испанском */}
+          {/* H1 */}
           <h1 className="mx-auto max-w-[52rem] text-balance text-4xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
             <span className="bg-gradient-to-r from-cyan-400 to-emerald-300 bg-clip-text text-transparent">
               Futuro digital
@@ -42,7 +48,7 @@ export default function Hero() {
             seguro.
           </h1>
 
-          {/* Sub — про MSSP и F.A.C.C.T. ASM */}
+          {/* Sub */}
           <p className="mx-auto max-w-[48rem] text-pretty text-base text-white/80 md:text-lg">
             Somos el <strong>primer MSSP en España</strong> que integra las soluciones
             <br className="hidden sm:block" />
@@ -115,10 +121,12 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Indicador de scroll */}
+        {/* Indicador de scroll — выше, чтобы всегда был в зоне видимости */}
         <a
           href="#services"
-          className="group absolute inset-x-0 bottom-4 mx-auto w-max rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs text-white/70 backdrop-blur transition hover:bg-white/10"
+          className="group absolute inset-x-0 bottom-12 md:bottom-14 z-20 mx-auto w-fit
+                     rounded-full border border-white/10 bg-white/5 px-3 py-1
+                     text-xs text-white/70 backdrop-blur transition hover:bg-white/10"
           aria-label="Desplazar a servicios"
         >
           Desplazar a servicios

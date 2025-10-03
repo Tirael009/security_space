@@ -82,17 +82,17 @@ export default function PartnersMarquee() {
   return (
     <section
       aria-label="Clientes y partners"
-      className="relative mx-auto max-w-[100vw] overflow-hidden border-y border-white/10 bg-[#05070a] py-10"
+      className="relative mx-auto max-w-[100vw] border-y border-white/10 bg-[#05070a] py-8 md:py-12 my-12 md:my-16"
     >
       {/* мягкие градиенты по краям, чтобы вход/выход логотипов был приятным */}
       <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#05070a] to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#05070a] to-transparent" />
 
       {/* трек — управляется через RAF, без CSS-анимаций => без рывков и рестартов */}
-      <div ref={wrapperRef} className="relative">
+      <div ref={wrapperRef} className="relative mx-auto max-w-7xl px-4 overflow-hidden">
         <ul
           ref={trackRef}
-          className="flex items-center gap-16 px-8 will-change-transform"
+          className="flex items-center gap-10 md:gap-12 px-6 will-change-transform"
           style={{ transform: 'translate3d(0,0,0)' }}
         >
           {items.map((logo, i) => (
@@ -105,7 +105,7 @@ export default function PartnersMarquee() {
                 alt={logo.alt}
                 width={logo.width ?? 160}
                 height={logo.height ?? 60}
-                className="h-12 w-auto md:h-14"
+                className="h-10 w-auto md:h-12"
                 priority={i < 6}
               />
             </li>
@@ -114,8 +114,10 @@ export default function PartnersMarquee() {
       </div>
 
       {/* подпись-социальное доказательство */}
-      <div className="absolute -top-6 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/10 bg-[#0b0e11]/90 px-4 py-1 text-xs font-medium text-white/80 shadow-md backdrop-blur">
-        🚀 Más de <span className="font-semibold text-teal-400">20 partners</span> confían en nosotros
+      <div className="absolute -top-6 md:-top-8 left-1/2 z-20 -translate-x-1/2
+             rounded-full border border-white/10 bg-[#0b0e11]/90
+             px-4 py-1 text-xs font-medium text-white/80 shadow-md backdrop-blur">
+        Más de <span className="font-semibold text-teal-400">20 partners</span> confían en nosotros
       </div>
     </section>
   );
