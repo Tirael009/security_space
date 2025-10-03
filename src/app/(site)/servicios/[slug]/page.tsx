@@ -34,7 +34,7 @@ export default function ServicePage({ params }: Props) {
 
   return (
     <>
-      <main className="relative">
+      <main className="relative overflow-x-clip">
         {/* Fondo tecnológico coherente con la home */}
         <NeuralNetBg />
         <div className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(70%_55%_at_50%_30%,rgba(0,0,0,.35),transparent_70%)]" aria-hidden="true" />

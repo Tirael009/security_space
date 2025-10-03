@@ -12,7 +12,7 @@ export default function Section({
   className?: string;
 }) {
   return (
-    <section className={clsx('mx-auto max-w-6xl px-4 py-16 md:py-24', className)}>
+    <section className={clsx('mx-auto max-w-6xl px-4 py-10 md:py-14', className)}>
       {title ? (
         <div className="mb-6 text-center">
           <h2 className="font-heading text-2xl font-bold md:text-3xl">{title}</h2>

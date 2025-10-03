@@ -4,6 +4,11 @@
   --brand2: 268 100% 60%;    /* фуксия */
 }
 
+html, body {
+  overflow-x: clip;        /* в новых браузерах */
+  /* overflow-x: hidden; */ /* как бэкап, если clip не поддерживается */
+}
+
 @keyframes pan {
   0% { background-position: 0 0, 0 0; }
   100% { background-position: 2000px 0, 0 2000px; }
