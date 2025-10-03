@@ -115,7 +115,7 @@ function ServiceCard({ s }: { s: Service }) {
 
         <div className="mt-auto pt-4">
           <Link
-            href={`/servicios?focus=${encodeURIComponent(s.slug)}`}
+            href={`/servicios/${s.slug}`}
             className="inline-flex items-center gap-2 rounded-lg border border-sky-500/30 bg-sky-400/5 px-3 py-2 text-sm font-medium text-sky-200 transition hover:bg-sky-400/10"
             aria-label={`Más detalles: ${s.title}`}
           >

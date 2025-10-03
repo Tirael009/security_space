@@ -9,6 +9,7 @@ import Link from 'next/link';
 export type ServiceVM = {
   title: string;
   hero: { eyebrow?: string; subtitle: string };
+  intro?: string;
   deliverables: string[];
   methodology: string[];
   timelines: { label: string; value: string }[];
@@ -27,9 +28,25 @@ export default function ServiceView({ vm }: { vm: ServiceVM }) {
         className="pt-8"
       />
 
+      {/* Intro opcional */}
+      {vm.intro ? (
+        <Section>
+          <div className="mx-auto max-w-3xl">
+            <div className="h-px w-full bg-gradient-to-r from-cyan-400/30 via-emerald-300/30 to-cyan-400/30" aria-hidden="true" />
+            <div className="prose prose-invert mt-6 max-w-none text-white/80">
+              {vm.intro.split('\n\n').map((p) => (
+                <p key={p} className="leading-relaxed tracking-[0.005em]">
+                  {p}
+                </p>
+              ))}
+            </div>
+          </div>
+        </Section>
+      ) : null}
+
       {/* Entregables + Metodología */}
       <Section title="¿Qué entregamos?" subtitle="Entregables claros y metodología transparente para tu equipo.">
-        <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-2">
+        <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-2">
           <Card title="Entregables" items={vm.deliverables} />
           <Card title="Metodología" items={vm.methodology} />
         </div>
@@ -37,7 +54,7 @@ export default function ServiceView({ vm }: { vm: ServiceVM }) {
 
       {/* Plazos & Alcance */}
       <Section title="Plazos & Alcance">
-        <div className="mx-auto grid max-w-5xl gap-4 md:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl gap-5 md:grid-cols-3">
           <InfoBox>
             <ListDense
               title="Plazos"
@@ -48,11 +65,13 @@ export default function ServiceView({ vm }: { vm: ServiceVM }) {
             <ListDense title="Requisitos" items={vm.requirements} />
           </InfoBox>
           <InfoBox>
-            <div className="text-sm text-white/75">
+            <div className="text-sm text-white/80">
               <b>Precio orientativo:</b>
-              <ul className="mt-2 space-y-1">
+              <ul className="mt-2 space-y-1.5">
                 {vm.pricingFactors.map((f) => (
-                  <li key={f}>• {f}</li>
+                  <li key={f} className="pl-5 before:-ml-5 before:mr-2 before:inline-block before:size-1.5 before:translate-y-[-1px] before:rounded-full before:bg-emerald-300/80">
+                    {f}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -69,8 +88,8 @@ export default function ServiceView({ vm }: { vm: ServiceVM }) {
 
       {/* CTA */}
       <Section>
-        <div className="mx-auto max-w-3xl rounded-2xl bg-white/5 p-6 text-center ring-1 ring-white/10">
-          <h3 className="font-heading text-xl font-semibold">
+        <div className="mx-auto max-w-3xl rounded-2xl border border-white/10 bg-white/[0.04] p-6 text-center ring-1 ring-white/10 backdrop-blur">
+          <h3 className="font-heading text-xl font-semibold tracking-tight">
             ¿Quieres empezar con algo rápido?
           </h3>
           <p className="mt-1 text-white/75">
@@ -79,7 +98,7 @@ export default function ServiceView({ vm }: { vm: ServiceVM }) {
           <div className="mt-4">
             <Link
               href="/auditoria-gratuita"
-              className="inline-flex rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black hover:bg-white/90"
+              className="inline-flex rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-black shadow-[0_10px_30px_-12px_rgba(255,255,255,0.35)] transition hover:bg-white/90"
             >
               Auditoría 0€
             </Link>
@@ -93,11 +112,21 @@ export default function ServiceView({ vm }: { vm: ServiceVM }) {
 /* ---------- helpers ---------- */
 function Card({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
-      <h3 className="font-semibold">{title}</h3>
-      <ul className="mt-2 space-y-2 text-sm text-white/75">
+    <div
+      className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-5 ring-1 ring-white/10 backdrop-blur"
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-cyan-400 via-emerald-300 to-cyan-400 opacity-90" />
+      <h3 className="font-heading text-[15px] font-semibold tracking-tight text-white">
+        {title}
+      </h3>
+      <ul className="mt-2 space-y-2 text-sm text-white/80">
         {items.map((e) => (
-          <li key={e}>• {e}</li>
+          <li
+            key={e}
+            className="pl-5 leading-relaxed before:-ml-5 before:mr-2 before:inline-block before:size-1.5 before:translate-y-[-1px] before:rounded-full before:bg-cyan-300/80"
+          >
+            {e}
+          </li>
         ))}
       </ul>
     </div>
@@ -106,7 +135,8 @@ function Card({ title, items }: { title: string; items: string[] }) {
 
 function InfoBox({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-5 ring-1 ring-white/10 backdrop-blur">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-emerald-300 via-cyan-400 to-emerald-300 opacity-90" />
       {children}
     </div>
   );
@@ -114,11 +144,16 @@ function InfoBox({ children }: { children: React.ReactNode }) {
 
 function ListDense({ title, items }: { title: string; items: string[] }) {
   return (
-    <div className="text-sm text-white/75">
-      <b>{title}:</b>
-      <ul className="mt-2 space-y-1">
+    <div className="text-sm text-white/80">
+      <b className="text-white">{title}:</b>
+      <ul className="mt-2 space-y-1.5">
         {items.map((f) => (
-          <li key={f}>• {f}</li>
+          <li
+            key={f}
+            className="pl-5 before:-ml-5 before:mr-2 before:inline-block before:size-1.5 before:translate-y-[-1px] before:rounded-full before:bg-cyan-300/80"
+          >
+            {f}
+          </li>
         ))}
       </ul>
     </div>

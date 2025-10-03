@@ -51,7 +51,7 @@ export default function Footer() {
         </div>
 
         {/* Основная сетка ссылок */}
-        <div className="mt-10 grid grid-cols-2 gap-8 text-sm md:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-8 text-sm md:grid-cols-3">
           <nav aria-label="Servicios" className="space-y-3">
             <div className="text-xs font-semibold uppercase tracking-wider text-white/60">Servicios</div>
             <ul className="space-y-2 text-white/80">
@@ -63,16 +63,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <nav aria-label="Recursos" className="space-y-3">
-            <div className="text-xs font-semibold uppercase tracking-wider text-white/60">Recursos</div>
-            <ul className="space-y-2 text-white/80">
-              <li><Link href="/casos" className="hover:text-white">Casos</Link></li>
-              <li><Link href="/metodologia" className="hover:text-white">Metodología</Link></li>
-              <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
-              <li><Link href="/partners" className="hover:text-white">Partners</Link></li>
-              <li><Link href="/contacto" className="hover:text-white">Contacto</Link></li>
-            </ul>
-          </nav>
+          
 
           <nav aria-label="Cumplimiento" className="space-y-3">
             <div className="text-xs font-semibold uppercase tracking-wider text-white/60">Cumplimiento</div>

@@ -11,8 +11,8 @@ export default function HomePage() {
       <main>
         <Hero />
         <PartnersMarquee />
-        <ServicesGrid />
         <Process />
+        <ServicesGrid />
         <CTA />
         <Contact />
       </main>
